@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import { RunContainerStepArgs } from 'hooklib/lib'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -8,11 +9,15 @@ import {
   registryLogout
 } from '../dockerCommands'
 import { getRunnerLabel } from '../dockerCommands/constants'
+import { countReset } from 'console'
 
 export async function runContainerStep(
   args: RunContainerStepArgs,
   state
 ): Promise<void> {
+
+  core.info(`HOOK: runContainerStep: ${JSON.stringify(args)} state: ${JSON.stringify(state)}`)  
+
   const tag = generateBuildTag() // for docker build
   if (args.image) {
     const configLocation = await registryLogin(args.registry)
