@@ -1,31 +1,83 @@
-## Runner Container Hooks
-The Runner Container Hooks repo provides a set of packages that implement the container hooks feature in the [actions/runner](https://github.com/actions/runner). These can be used as is, or you can use them as a guide to implement your own hooks.
+## Runner Container Hooks Tracer
 
-More information on how to implement your own hooks can be found in the [adr](https://github.com/actions/runner/pull/1891). The `examples` folder provides example inputs for each hook.
+Add some loging to default docker [runner-container-hooks](https://github.com/actions/runner-container-hooks.git) to have a better understanding of the flow
 
-## Background 
+## Findings
 
-Three projects are included in the `packages` folder
-- k8s: A kubernetes hook implementation that spins up pods dynamically to run a job. More details can be found in the [readme](./packages/k8s/README.md)
-- docker: A hook implementation of the runner's docker implementation. More details can be found in the [readme](./packages/docker/README.md)
-- hooklib: a shared library which contains typescript definitions and utilities that the other projects consume
+### OIDC
 
-### Requirements
+OIDC is NOT available in the hooks, trying to get (for example during a docker run) a token results in the error:
 
-We welcome contributions.  See [how to contribute to get started](./CONTRIBUTING.md).
+`Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable`
 
-## License 
+Don't know if this is by design or an oversight, it should be a feature.
 
-This project is licensed under the terms of the MIT open source license. Please refer to [MIT](./LICENSE.md) for the full terms.
+### Environment Variables
 
-## Maintainers 
+During (snapshot obtained during a docker run, it may vary during other callbacks) these are the env variables available:
 
-See the [Codeowners](./CODEOWNERS)
 
-## Support
+* GITHUB_JOB
+* GITHUB_REF
+* GITHUB_SHA
+* GITHUB_REPOSITORY
+* GITHUB_REPOSITORY_OWNER
+* GITHUB_REPOSITORY_OWNER_ID
+* GITHUB_RUN_ID
+* GITHUB_RUN_NUMBER
+* GITHUB_RETENTION_DAYS
+* GITHUB_RUN_ATTEMPT
+* GITHUB_REPOSITORY_ID
+* GITHUB_ACTOR_ID
+* GITHUB_ACTOR
+* GITHUB_TRIGGERING_ACTOR
+* GITHUB_WORKFLOW
+* GITHUB_HEAD_REF
+* GITHUB_BASE_REF
+* GITHUB_EVENT_NAME
+* GITHUB_SERVER_URL
+* GITHUB_API_URL
+* GITHUB_GRAPHQL_URL
+* GITHUB_REF_NAME
+* GITHUB_REF_PROTECTED
+* GITHUB_REF_TYPE
+* GITHUB_WORKFLOW_REF
+* GITHUB_WORKFLOW_SHA
+* GITHUB_WORKSPACE
+* GITHUB_ACTION
+* GITHUB_EVENT_PATH
+* GITHUB_ACTION_REPOSITORY
+* GITHUB_ACTION_REF
+* GITHUB_PATH
+* GITHUB_ENV
+* GITHUB_STEP_SUMMARY
+* GITHUB_STATE
+* GITHUB_OUTPUT
+* RUNNER_OS
+* RUNNER_ARCH
+* RUNNER_NAME
+* RUNNER_ENVIRONMENT
+* RUNNER_TOOL_CACHE
+* RUNNER_TEMP
+* RUNNER_WORKSPACE
 
-Find a bug? Please file an issue in this repository using the issue templates.
+### Running
 
-## Code of Conduct
+#### Compiling code
 
-See our [Code of Conduct](./CODE_OF_CONDUCT.MD)
+```shell
+cd packages/hooklib
+npm install
+npm run build
+cd ../docker
+npm run install
+npm run build
+```
+
+#### Self hosted runner
+
+Set the following environment variables before executing the self hosted runner:
+
+(replace ....... with the path to the repo), the path needs to be absolute.
+
+`ACTIONS_RUNNER_CONTAINER_HOOKS=/......./packages/docker/lib/index.js`

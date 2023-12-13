@@ -17,6 +17,14 @@ export async function runDockerCommand(
   args: string[],
   options?: RunDockerCommandOptions
 ): Promise<string> {
+
+
+  Object.entries(process.env).forEach(([key, value]) => {
+    core.info(`HOOK: ${key}: ${value}`);
+  })  
+
+  core.info(`HOOK: runDockerCommand args: ${JSON.stringify(args)} options: ${JSON.stringify(options)}`)
+
   options = optionsWithDockerEnvs(options)
   args = fixArgs(args)
   const pipes = await exec.getExecOutput('docker', args, options)

@@ -91,6 +91,9 @@ export async function containerPull(
   image: string,
   configLocation: string
 ): Promise<void> {
+
+  core.info(`HOOK: Pulling image: ${image}`)
+
   const dockerArgs: string[] = []
   if (configLocation) {
     dockerArgs.push('--config')
@@ -144,6 +147,9 @@ export async function containerBuild(
   args: RunContainerStepArgs,
   tag: string
 ): Promise<void> {
+
+  core.info(`HOOK: Building container: ${tag} with args ${JSON.stringify(args)}`)
+
   if (!args.dockerfile) {
     throw new Error("Container build expects 'args.dockerfile' to be set")
   }
@@ -290,6 +296,9 @@ export async function getContainerEnvValue(
 }
 
 export async function registryLogin(registry?: Registry): Promise<string> {
+
+  core.info(`registryLogin ${JSON.stringify(registry)}`)
+
   if (!registry) {
     return ''
   }

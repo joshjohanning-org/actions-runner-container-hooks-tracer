@@ -27,6 +27,8 @@ export async function prepareJob(
   const container = args.container
   const services = args.services
 
+  core.info(`HOOK: prepareJob: ${JSON.stringify(args)}`)  
+
   if (!container?.image && !services?.length) {
     core.info('No containers exist, skipping hook invocation')
     exit(0)
