@@ -70,7 +70,7 @@ cd packages/hooklib
 npm install
 npm run build
 cd ../docker
-npm run install
+npm install
 npm run build
 ```
 
