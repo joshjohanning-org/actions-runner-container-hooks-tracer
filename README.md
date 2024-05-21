@@ -76,7 +76,7 @@ npm run build
 
 #### Self hosted runner
 
-Set the following environment variables before executing the self hosted runner:
+Set the following environment variables before executing the self hosted runner (you can create a `.env` file in the runner directory to set this):
 
 (replace ....... with the path to the repo), the path needs to be absolute.
 
