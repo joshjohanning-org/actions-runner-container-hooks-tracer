@@ -4,6 +4,27 @@ Add some loging to default docker [runner-container-hooks](https://github.com/ac
 
 ## Findings
 
+### Running
+
+#### Compiling code
+
+```shell
+cd packages/hooklib
+npm install
+npm run build
+cd ../docker
+npm install
+npm run build
+```
+
+#### Self hosted runner
+
+Set the following environment variable before executing the self-hosted runner (you can create a `.env` file in the runner directory to set):
+
+`ACTIONS_RUNNER_CONTAINER_HOOKS=/......./packages/docker/lib/index.js`
+
+(replace ....... with the path to the repo), the path needs to be absolute.
+
 ### OIDC
 
 OIDC is NOT available in the hooks, trying to get (for example during a docker run) a token results in the error:
@@ -60,24 +81,3 @@ During (snapshot obtained during a docker run, it may vary during other callback
 * RUNNER_TOOL_CACHE
 * RUNNER_TEMP
 * RUNNER_WORKSPACE
-
-### Running
-
-#### Compiling code
-
-```shell
-cd packages/hooklib
-npm install
-npm run build
-cd ../docker
-npm install
-npm run build
-```
-
-#### Self hosted runner
-
-Set the following environment variables before executing the self hosted runner (you can create a `.env` file in the runner directory to set this):
-
-(replace ....... with the path to the repo), the path needs to be absolute.
-
-`ACTIONS_RUNNER_CONTAINER_HOOKS=/......./packages/docker/lib/index.js`
